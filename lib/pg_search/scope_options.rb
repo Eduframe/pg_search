@@ -18,7 +18,6 @@ module PgSearch
 
       scope
         .joins(rank_join(rank_table_alias))
-        .order(Arel.sql("#{rank_table_alias}.rank DESC, #{order_within_rank}"))
         .extend(WithPgSearchRank)
         .extend(WithPgSearchHighlight[feature_for(:tsearch)])
     end
@@ -81,7 +80,6 @@ module PgSearch
     def subquery
       model
         .select("#{primary_key} AS pg_search_id")
-        .select("#{rank} AS rank")
         .joins(subquery_join)
         .where(conditions)
         .limit(nil)
